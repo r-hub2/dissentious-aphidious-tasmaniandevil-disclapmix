@@ -10,6 +10,8 @@
 #' db <- as.matrix(danes[rep(1:nrow(danes), danes$n), 1:(ncol(danes)-1)])
 #' fit <- disclapmix(db, clusters = 4L)
 #' str(export_compact_fit(fit), 1)
+#' 
+#' @export
 export_compact_fit <- function(fit) {
   if (!is(fit, "disclapmixfit")) {
     stop("fit must be a disclapmixfit object")
