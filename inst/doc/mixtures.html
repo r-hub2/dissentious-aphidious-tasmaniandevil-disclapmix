@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Mikkel Meyer Andersen" />
+
+
+<title>Mixtures</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">
+
+div.csl-bib-body { }
+div.csl-entry {
+clear: both;
+margin-bottom: 0em;
+}
+.hanging div.csl-entry {
+margin-left:2em;
+text-indent:-2em;
+}
+div.csl-left-margin {
+min-width:2em;
+float:left;
+}
+div.csl-right-inline {
+margin-left:2em;
+padding-left:1em;
+}
+div.csl-indent {
+margin-left: 2em;
+}
+</style>
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Mixtures</h1>
+<h4 class="author">Mikkel Meyer Andersen</h4>
+<h4 class="date">04 december, 2025</h4>
+
+
+
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>This vignette shows how to use the R package <code>disclapmix</code>
+that implements the method described in <span class="citation">(Andersen, Eriksen, and Morling 2013b)</span> and <span class="citation">(Andersen et al. 2015)</span>. For a more gentle
+introduction to the method, refer to the introduction vignette and <span class="citation">(Andersen, Eriksen, and Morling 2013a)</span>.</p>
+</div>
+<div id="mixture-analysis" class="section level1">
+<h1>Mixture analysis</h1>
+<p>We again use the Danish reference database <span class="citation">(Hallenberg et al. 2005)</span> with <span class="math inline">\(n = 185\)</span> observations (male Y-STR
+haplotypes) at <span class="math inline">\(r=10\)</span> loci is
+available in the <code>danes</code> dataset. Let us load the package as
+well as the data:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(disclapmix)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">data</span>(danes)</span></code></pre></div>
+<p>The database is in compact format, i.e. one unique haplotype per row.
+To fit the model, we need one observation per row. This is done for
+example like this:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>db <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(danes[<span class="fu">rep</span>(<span class="fu">seq_len</span>(<span class="fu">nrow</span>(danes)), danes<span class="sc">$</span>n), <span class="fu">seq_len</span>(<span class="fu">ncol</span>(danes)<span class="sc">-</span><span class="dv">1</span>)])</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="fu">str</span>(db)</span></code></pre></div>
+<pre><code>##  int [1:185, 1:10] 13 13 13 13 13 13 14 14 14 14 ...
+##  - attr(*, &quot;dimnames&quot;)=List of 2
+##   ..$ : chr [1:185] &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; ...
+##   ..$ : chr [1:10] &quot;DYS19&quot; &quot;DYS389I&quot; &quot;DYS389II&quot; &quot;DYS390&quot; ...</code></pre>
+<p>Also, note that the database is now an integer matrix.</p>
+<p>Assume now that we have a mixture and that the reference database are
+without these two contributors:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>donor1 <span class="ot">&lt;-</span> db[<span class="dv">1</span>, ]</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>donor2 <span class="ot">&lt;-</span> db[<span class="dv">20</span>, ]</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>refdb <span class="ot">&lt;-</span> db[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">20</span>), ]</span></code></pre></div>
+<p>We now construct the mixture:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>mix <span class="ot">&lt;-</span> <span class="fu">generate_mixture</span>(<span class="fu">list</span>(donor1, donor2))</span></code></pre></div>
+<p>We can then see some properties of possible pairs:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>pairs <span class="ot">&lt;-</span> <span class="fu">contributor_pairs</span>(mix)</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>pairs</span></code></pre></div>
+<pre><code>## Mixture:
+##   DYS19 DYS389I DYS389II DYS390 DYS391 DYS392 DYS393 DYS437 DYS438 DYS439
+## 1 13,14   13,14    29,30     22     10  13,15     13  14,15  11,12     12
+## 
+## Number of possible contributor pairs = 32</code></pre>
+<p>To do much more, we need a model assigning hpalotype probabilies. In
+the introduction vignette, we found that 4 clusters seemed fine, so let
+us fit this model:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">disclapmix</span>(<span class="at">x =</span> refdb, <span class="at">clusters =</span> <span class="dv">4</span><span class="dt">L</span>)</span></code></pre></div>
+<p>We can now use this model to e.g. rank the contributor pairs:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>ranked_pairs <span class="ot">&lt;-</span> <span class="fu">rank_contributor_pairs</span>(pairs, fit)</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>ranked_pairs</span></code></pre></div>
+<pre><code>## Mixture:
+##   DYS19 DYS389I DYS389II DYS390 DYS391 DYS392 DYS393 DYS437 DYS438 DYS439
+## 1 13,14   13,14    29,30     22     10  13,15     13  14,15  11,12     12
+## 
+## Contributor pairs = 32
+## 
+## Sum of all (product of contributor pair haplotypes) = 2.263911e-14
+## 
+## Showing rank 1-5:
+## 
+## Rank 1 [ P(H1)*P(H2) = 2.929608e-15 ]:
+##    DYS19 DYS389I DYS389II DYS390 DYS391 DYS392 DYS393 DYS437 DYS438 DYS439
+## H1    13      14       30      .      .     15      .     14     11      .
+## H2    14      13       29      .      .     13      .     15     12      .
+##            Prob
+## H1 1.945729e-11
+## H2 1.505661e-04
+## 
+## Rank 2 [ P(H1)*P(H2) = 2.224515e-15 ]:
+##    DYS19 DYS389I DYS389II DYS390 DYS391 DYS392 DYS393 DYS437 DYS438 DYS439
+## H1    13      13       29      .      .     13      .     15     12      .
+## H2    14      14       30      .      .     15      .     14     11      .
+##            Prob
+## H1 2.216703e-05
+## H2 1.003524e-10
+## 
+## Rank 3 [ P(H1)*P(H2) = 1.722751e-15 ]:
+##    DYS19 DYS389I DYS389II DYS390 DYS391 DYS392 DYS393 DYS437 DYS438 DYS439
+## H1    13      14       30      .      .     13      .     14     11      .
+## H2    14      13       29      .      .     15      .     15     12      .
+##            Prob
+## H1 3.356602e-09
+## H2 5.132425e-07
+## 
+## Rank 4 [ P(H1)*P(H2) = 1.364569e-15 ]:
+##    DYS19 DYS389I DYS389II DYS390 DYS391 DYS392 DYS393 DYS437 DYS438 DYS439
+## H1    13      13       29      .      .     15      .     15     12      .
+## H2    14      14       30      .      .     13      .     14     11      .
+##            Prob
+## H1 7.556192e-08
+## H2 1.805895e-08
+## 
+## Rank 5 [ P(H1)*P(H2) = 1.060766e-15 ]:
+##    DYS19 DYS389I DYS389II DYS390 DYS391 DYS392 DYS393 DYS437 DYS438 DYS439
+## H1    13      13       30      .      .     15      .     14     11      .
+## H2    14      14       29      .      .     13      .     15     12      .
+##            Prob
+## H1 6.777397e-11
+## H2 1.565152e-05
+## 
+##  (27 contributor pairs hidden.)</code></pre>
+<p>We can get the ranks for the donors:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="fu">get_rank</span>(ranked_pairs, donor1)</span></code></pre></div>
+<pre><code>## [1] 13</code></pre>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="fu">get_rank</span>(ranked_pairs, donor2)</span></code></pre></div>
+<pre><code>## [1] 13</code></pre>
+</div>
+<div id="references" class="section level1 unnumbered">
+<h1 class="unnumbered">References</h1>
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div id="ref-AndersenDisclapMixture2015" class="csl-entry">
+Andersen, Mikkel Meyer, Poul Svante Eriksen, Helle Smidt Mogensen, and
+Niels Morling. 2015. <span>“<span class="nocase">Identifying the most
+likely contributors to a Y-STR mixture using the discrete Laplace
+method</span>.”</span> <em>Forensic Science International: Genetics</em>
+15: 76–83. <a href="https://doi.org/10.1016/j.fsigen.2014.09.011">https://doi.org/10.1016/j.fsigen.2014.09.011</a>.
+</div>
+<div id="ref-AndersenDisclapIntroduction2013" class="csl-entry">
+Andersen, Mikkel Meyer, Poul Svante Eriksen, and Niels Morling. 2013a.
+<span>“<span class="nocase">A gentle introduction to the discrete
+Laplace method for estimating Y-STR haplotype
+frequencies</span>.”</span> <em>Preprint, arXiv:1304.2129</em>.
+</div>
+<div id="ref-AndersenDisclap2013" class="csl-entry">
+———. 2013b. <span>“<span class="nocase">The discrete Laplace exponential
+family and estimation of Y-STR haplotype frequencies</span>.”</span>
+<em>Journal of Theoretical Biology</em> 329: 39–51. <a href="https://doi.org/10.1016/j.jtbi.2013.03.009">https://doi.org/10.1016/j.jtbi.2013.03.009</a>.
+</div>
+<div id="ref-Hallenberg2005YchromosomeSH" class="csl-entry">
+Hallenberg, Charlotte, Karsten Nielsen, Bo Simonsen, Juan Sanchez, and
+Niels Morling. 2005. <span>“Y-Chromosome STR Haplotypes in
+Danes.”</span> <em>Forensic Science International</em> 155 2-3: 205–10.
+</div>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
