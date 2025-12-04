@@ -11,7 +11,8 @@ A central function is \code{\link{disclapmix_adaptive}} (and the underlying \cod
 \seealso{
 Useful links:
 \itemize{
-  \item \url{http://dx.doi.org/10.1016/j.jtbi.2013.03.009 https://arxiv.org/abs/1304.2129}
+  \item \doi{10.1016/j.jtbi.2013.03.009}
+  \item \url{https://arxiv.org/abs/1304.2129}
   \item Report bugs at \url{https://github.com/mikldk/disclapmix/issues}
 }
 
